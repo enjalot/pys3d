@@ -37,7 +37,7 @@ def merge_to_mpo(fl, fr, size):
     lmap.seek(0)
     rmap.seek(0)
    
-   """
+    """
     flo = open("testleft.jpg", 'w')
     flo.write(lmap.read(size[0]))
     flo.close()
@@ -50,8 +50,18 @@ def merge_to_mpo(fl, fr, size):
     fmpo.close()
     
 
+def split_and_save():
+    #f = open('../sistersstatue.mpo')
+    f = open('../AKDPhitable.MPO')
+    fl, fr, size = split_mpo(f)
+    #fl, fr = rotate_pair(fl, fr, 90)
 
-f = open('../sistersstatue.mpo')
-fl, fr, size = split_mpo(f)
-fl, fr = rotate_pair(fl, fr, 90)
-merge_to_mpo(fl, fr, size)
+    ifl = open("leftakdphi.jpg", 'wb')
+    ifr = open("rightakdphi.jpg", 'wb')
+
+    fl.save(ifl, 'JPEG')
+    fr.save(ifr, 'JPEG')
+    ifl.close()
+    ifr.close()
+
+#merge_to_mpo(fl, fr, size)
