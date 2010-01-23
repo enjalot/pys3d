@@ -27,7 +27,7 @@ def rotate_pair(fleft, fright, degrees):
     return imlrot, imrrot
 
 #Merge left and right Image objects into a file
-def merge_to_mpo(fl, fr, size):
+def merge_to_mpo(filename, fl, fr, size):
     #make in-memory files so Image module can write to them
     lmap = mmap.mmap(-1, size[0])
     rmap = mmap.mmap(-1, size[1])
@@ -45,13 +45,20 @@ def merge_to_mpo(fl, fr, size):
     
     #append the images together
     mpo = lmap.read(size[0]) + rmap.read(size[1])
-    fmpo = open("test.mpo", 'wb')
+    fmpo = open(filename, 'wb')
     fmpo.write(mpo)
     fmpo.close()
     
 
 
+
+"""
 f = open('../sistersstatue.mpo')
 fl, fr, size = split_mpo(f)
 fl, fr = rotate_pair(fl, fr, 90)
-merge_to_mpo(fl, fr, size)
+merge_to_mpo("test.mpo", fl, fr, size)
+"""
+
+
+
+
