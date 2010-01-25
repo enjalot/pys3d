@@ -51,7 +51,7 @@ xrot = yrot = zrot = 0.0
 #right_texture = 0
 
 def LoadTextures():
-    global left_texture, right_texture
+    global left_texture, right_texture, Lix, Liy, Rix, Riy
 
     Limage = open("random-90.jpg")
 
@@ -101,29 +101,35 @@ def LoadTextures():
 def InitGL(Width, Height):				# We call this right after our OpenGL window is created.
     LoadTextures()
     glEnable(GL_TEXTURE_2D)
-    glClearColor(0.0, 0.0, 0.0, 0.0)	# This Will Clear The Background Color To Black
+    glClearColor(1.0, 0.0, 0.0, 0.0)	# This Will Clear The Background Color To Black
+    glClear(GL_COLOR_BUFFER_BIT)
     glClearDepth(1.0)					# Enables Clearing Of The Depth Buffer
     glDepthFunc(GL_LESS)				# The Type Of Depth Test To Do
     glEnable(GL_DEPTH_TEST)				# Enables Depth Testing
     glShadeModel(GL_SMOOTH)				# Enables Smooth Color Shading
-	
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()					# Reset The Projection Matrix
-										# Calculate The Aspect Ratio Of The Window
-    gluPerspective(45.0, float(Width)/float(Height), 0.1, 100.0)
 
+    glViewport(0, 0, Width, Height)		# Reset The Current Viewport And Perspective Transformation
+
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluOrtho2D(-1, 1, -1, 1)
     glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+    glDisable(GL_DEPTH_TEST)
 
 # The function called when our window is resized (which shouldn't happen if you enable fullscreen, below)
 def ReSizeGLScene(Width, Height):
     if Height == 0:						# Prevent A Divide By Zero If The Window Is Too Small 
 	    Height = 1
 
+    glClear(GL_COLOR_BUFFER_BIT)
     glViewport(0, 0, Width, Height)		# Reset The Current Viewport And Perspective Transformation
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(45.0, float(Width)/float(Height), 0.1, 100.0)
+    gluOrtho2D(-1, 1, -1, 1)
     glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+    glDisable(GL_DEPTH_TEST)
 
 # The main drawing function. 
 def DrawGLScene():
@@ -131,7 +137,7 @@ def DrawGLScene():
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)	# Clear The Screen And The Depth Buffer
 	glLoadIdentity()					# Reset The View
-	glTranslatef(0.0,0.0,-4.0)			# Move Into The Screen
+#	glTranslatef(0.0,0.0,-4.0)			# Move Into The Screen
 #
 #	glRotatef(xrot,1.0,0.0,0.0)			# Rotate The Cube On It's X Axis
 #	glRotatef(yrot,0.0,1.0,0.0)			# Rotate The Cube On It's Y Axis
@@ -144,19 +150,19 @@ def DrawGLScene():
 	# LEFT EYE
 	glBindTexture(GL_TEXTURE_2D,left_texture)	# Rotate The Pyramid On It's Y Axis
 	glBegin(GL_QUADS)			    # Start Drawing The Cube
-	glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0,  1.0)	# Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0, 0.0); glVertex3f( 0.0, -1.0,  1.0)	# Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0, 1.0); glVertex3f( 0.0,  1.0,  1.0)	# Top Right Of The Texture and Quad
-	glTexCoord2f(0.0, 1.0); glVertex3f(-1.0,  1.0,  1.0)	# Top Left Of The Texture and Quad
+	glTexCoord2f(0.0, 0.0); glVertex2f(-1.0, -1.0)	# Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0, 0.0); glVertex2f( 0.0, -1.0)	# Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0, 1.0); glVertex2f( 0.0,  1.0)	# Top Right Of The Texture and Quad
+	glTexCoord2f(0.0, 1.0); glVertex2f(-1.0,  1.0)	# Top Left Of The Texture and Quad
         glEnd()
         
 	# RIGHT EYE
 	glBindTexture(GL_TEXTURE_2D,right_texture)	# Rotate The Pyramid On It's Y Axis
 	glBegin(GL_QUADS)			    # Start Drawing The Cube
-	glTexCoord2f(0.0, 0.0); glVertex3f(0.0, -1.0,  1.0)	# Bottom Left Of The Texture and Quad
-	glTexCoord2f(1.0, 0.0); glVertex3f( 1.0, -1.0,  1.0)	# Bottom Right Of The Texture and Quad
-	glTexCoord2f(1.0, 1.0); glVertex3f( 1.0,  1.0,  1.0)	# Top Right Of The Texture and Quad
-	glTexCoord2f(0.0, 1.0); glVertex3f(0.0,  1.0,  1.0)	# Top Left Of The Texture and Quad
+	glTexCoord2f(0.0, 0.0); glVertex2f(0.0, -1.0)	# Bottom Left Of The Texture and Quad
+	glTexCoord2f(1.0, 0.0); glVertex2f( 1.0, -1.0)	# Bottom Right Of The Texture and Quad
+	glTexCoord2f(1.0, 1.0); glVertex2f( 1.0,  1.0)	# Top Right Of The Texture and Quad
+	glTexCoord2f(0.0, 1.0); glVertex2f(0.0,  1.0)	# Top Left Of The Texture and Quad
         glEnd()
 #
 	#  since this is double buffered, swap the buffers to display what just got drawn. 
