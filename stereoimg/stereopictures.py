@@ -30,15 +30,25 @@ def loadImages():
     image_left = open("images/sistersleft.bmp")
     image_right = open("images/sistersright.bmp")
 
-    imw = image_left.size[0]
-    imh = image_left.size[1]
+    temp_imw = image_left.size[0]
+    temp_imh = image_left.size[1]
 
-    if( (imw!=image_right.size[0]) or
-        (imh!=image_right.size[1]) ):
+    if( (temp_imw!=image_right.size[0]) or
+        (temp_imh!=image_right.size[1]) ):
         print "Not same size"
 
+    if(temp_imw>temp_imh):
+        imw = 1024
+        imh = int(imw*(float(temp_imh)/float(temp_imw)))
+    else:
+        imh = 768
+        imw = int(imh*(float(temp_imw)/float(temp_imh)))
+
 def loadTextures():
-    global textures, imw, imh, image_left,image_right
+    global textures, image_left,image_right
+
+    temp_imw = image_left.size[0]
+    temp_imh = image_left.size[1]
 
     image_left = image_left.tostring("raw", "RGBX", 0, -1)
     image_right = image_right.tostring("raw", "RGBX", 0, -1)
@@ -47,7 +57,7 @@ def loadTextures():
     textures = glGenTextures(2)
 
     glBindTexture(GL_TEXTURE_2D, textures[0])
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, imw, imh, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_left)
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, temp_imw, temp_imh, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_left)
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP)
@@ -57,7 +67,7 @@ def loadTextures():
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
 
     glBindTexture(GL_TEXTURE_2D, textures[1])
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, imw, imh, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_right)
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, temp_imw, temp_imh, 0, GL_RGBA, GL_UNSIGNED_BYTE, image_right)
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP)
@@ -195,8 +205,10 @@ else:
     
 loadImages()
 print "Size= ",imw,"x",imh
-glutInitWindowSize( imw, imh)
-glutInitWindowPosition( 100, 100 )
+
+glutInitWindowSize(imw,imh)
+    
+glutInitWindowPosition( 300, 10)
 glutCreateWindow( "3D pictures" )
 init(  )
 
