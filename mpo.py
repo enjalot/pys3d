@@ -62,9 +62,24 @@ def split_and_save():
 """
 f = open('../sistersstatue.mpo')
 fl, fr, size = split_mpo(f)
-fl, fr = rotate_pair(fl, fr, 90)
-merge_to_mpo("test.mpo", fl, fr, size)
+print fl.size
+print len(fl.getdata())
+print size
+#fl, fr = rotate_pair(fl, fr, 90)
+#merge_to_mpo("test.mpo", fl, fr, size)
 """
 
+"""
+#experimenting with stitching 2 images into an MPO
+#doesn't really work...
+fl = Image.open("../bert/left0.png")
+fr = Image.open("../bert/right0.png")
+flf = open('../bert/left0.png')
+flstr = flf.read()[:]
+frf = open('../bert/right0.png')
+frstr = frf.read()[:]
+size = len(flstr), len(frstr)
+print size
 
-
+merge_to_mpo("../bert/leftright0.mpo", fl, fr, size)
+"""
